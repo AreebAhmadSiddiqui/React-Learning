@@ -914,3 +914,113 @@ React component function run karta hai → Virtual DOM banata hai.
 - Jo plan bana tha, use real DOM pe apply kiya jaata hai.
 - Is stage me DOM update hota hai, browser paint/reflow hota hai, aur user ko naya UI dikhta hai.
 
+
+# Lession 7 ( Tailwind and Props)
+
+**What are props?**
+
+- Props (short for "properties") are a fundamental concept in React that allow you to pass data from parent components to child components. They are read-only and help make components reusable and dynamic.
+
+```javascript
+Basic Syntax
+jsx
+// Parent Component
+function App() {
+  return <ChildComponent name="John" age={25} />;
+}
+
+// Child Component
+function ChildComponent(props) {
+  return (
+    <div>
+      <p>Name: {props.name}</p>
+      <p>Age: {props.age}</p>
+    </div>
+  );
+}
+Different Ways to Receive Props
+1. Using the props Object
+jsx
+function User(props) {
+  return (
+    <div>
+      <h2>{props.name}</h2>
+      <p>{props.email}</p>
+    </div>
+  );
+}
+2. Destructuring Props
+jsx
+// Destructuring in the parameter
+function User({ name, email, age }) {
+  return (
+    <div>
+      <h2>{name}</h2>
+      <p>{email} - {age} years old</p>
+    </div>
+  );
+}
+
+// Destructuring in the function body
+function User(props) {
+  const { name, email, age } = props;
+  return (
+    <div>
+      <h2>{name}</h2>
+      <p>{email}</p>
+    </div>
+  );
+}
+Types of Props
+1. String Props
+jsx
+<Component title="Hello World" />
+2. Number Props
+jsx
+<Component count={42} rating={4.5} />
+3. Boolean Props
+jsx
+<Component isActive={true} showDetails={false} />
+// Shorthand for true
+<Component isActive />
+4. Array Props
+jsx
+<Component items={['apple', 'banana', 'orange']} />
+5. Object Props
+jsx
+<Component user={{ name: 'John', age: 25 }} />
+6. Function Props (Callbacks)
+jsx
+function Parent() {
+  const handleClick = () => {
+    console.log('Button clicked!');
+  };
+
+  return <Child onButtonClick={handleClick} />;
+}
+
+function Child({ onButtonClick }) {
+  return <button onClick={onButtonClick}>Click me</button>;
+}
+7. React Element/Component Props
+jsx
+<Container header={<Header />} content={<MainContent />} />
+8. Children Prop (Special Prop)
+jsx
+function Card({ children, title }) {
+  return (
+    <div className="card">
+      <h3>{title}</h3>
+      <div className="card-content">
+        {children}
+      </div>
+    </div>
+  );
+}
+
+// Usage
+<Card title="My Card">
+  <p>This is the card content</p>
+  <button>Click me</button>
+</Card>
+```
