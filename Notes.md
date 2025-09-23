@@ -1024,3 +1024,77 @@ function Card({ children, title }) {
   <button>Click me</button>
 </Card>
 ```
+
+# Lession 8 ( Interview Counter Question)
+
+- Man lo increment decrement wale mein tumne (increment ke case mein setCount(count+1) chaar baar likh diya) to kya hoga
+- Chaar + hoga ki ek + ??
+
+**Ek Plus hoga**
+
+- Two methods hote hai ek simple setCount(count+1) doosra functional setCount(prevCount=>prevCount+1)
+- React kya karta hai batches mein setFunctions bhejta hai
+- React ke paas **state queue** hoti hai 
+- First case mein [currCount+1,currCount+1,currCount+1,currCount+1]
+- Doosre case mein [f(prevCount+1),f(prevCount+1),f(prevCount+1),f(prevCount+1)]
+
+```javascript
+
+1. Direct Way (Galat Tarika) - Behind the Scene:
+jsx
+const handleClick = () => {
+  setCount(count + 1);  // Order 1: "0 + 1 = 1 kardo"
+  setCount(count + 1);  // Order 2: "0 + 1 = 1 kardo" 
+  setCount(count + 1);  // Order 3: "0 + 1 = 1 kardo"
+  setCount(count + 1);  // Order 4: "0 + 1 = 1 kardo"
+};
+React ka Internal Process:
+
+React ke paas ek noteboo hai: count = 0
+
+Tumne 4 orders diye, sab mein likha hai: "current count + 1"
+
+React sochta hai: "Current count to 0 hai, to sab 0+1=1 hi honge"
+
+Queue: [set to 1, set to 1, set to 1, set to 1]
+
+Process karta hai: last wala 1 set karta hai
+
+Result: count = 1
+
+2. Functional Way (Sahi Tarika) - Behind the Scene:
+jsx
+const handleClick = () => {
+  setCount(prev => prev + 1);  // Order 1: "Jo bhi latest hai, usme +1 karo"
+  setCount(prev => prev + 1);  // Order 2: "Jo bhi latest hai, usme +1 karo"
+  setCount(prev => prev + 1);  // Order 3: "Jo bhi latest hai, usme +1 karo"
+  setCount(prev => prev + 1);  // Order 4: "Jo bhi latest hai, usme +1 karo"
+};
+React ka Internal Process:
+
+React ke paas ek noteboo hai: count = 0
+
+Tumne 4 functions diye, har function ka kaam hai: "previous value lo, usme +1 karo"
+
+React queue banata hai: [f1, f2, f3, f4] (functions ka queue)
+
+Process karta hai:
+
+f1 chalata hai: prev = 0 → return 1 → count = 1
+
+f2 chalata hai: prev = 1 → return 2 → count = 2
+
+f3 chalata hai: prev = 2 → return 3 → count = 3
+
+f4 chalata hai: prev = 3 → return 4 → count = 4
+
+Result: count = 4
+
+```
+
+# Lession 9 ( useEffect, useCallback and useRef)
+
+- I made a password generator and used useEffect, useCallback and useRef hook in the process
+- useRef kisi bhi cheez ka reference lene ke liye
+- useMemo rerender se bachata hai aur value store karta hai ( )
+- useCallback function ke reference ko freeze karne ke kaam ata hai 
