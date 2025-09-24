@@ -611,7 +611,7 @@ Babel React Developer ke liye yeh kaam karta hai:
 
 - Why hooks? - Bina hooks ke tumhe har jagah jake use update karna hoga variable ko ( state ko )
 - with hooks - react kahta hai agar ye variable(state) change hua to main uski sari jagah mein changes kardunga tumhe khud se kuch ni karna
-
+### Agar state variable change hoga to component re render hoga
 
 # Lession 6 ( Virtual DOM, Fibre and Reconcilitation )
 
@@ -1092,9 +1092,308 @@ Result: count = 4
 
 ```
 
-# Lession 9 ( useEffect, useCallback and useRef)
+# Lession 10 ( useEffect, useCallback and useRef)
 
 - I made a password generator and used useEffect, useCallback and useRef hook in the process
 - useRef kisi bhi cheez ka reference lene ke liye
 - useMemo rerender se bachata hai aur value store karta hai ( )
 - useCallback function ke reference ko freeze karne ke kaam ata hai 
+
+### a. useEffect 
+
+- This is used when we have to do any side effects ( like fetching an api, timer functions etc)
+- Basically jab hame kuch operation karna ho to after sometime ya kisi bhi variable ke change pe then we use this
+- Syntax - useEffect(cb,dependencyArray)
+- useEffect(cb)  -> runs on every re render of the compoenent
+- useEffect(cb,[])  -> runs on initial render
+- useEffect(cb,[someVariable,...])  -> runs whenever these variables change
+
+
+- useEffect(()=>{
+
+  your logic
+
+  // cleanup function ( agar timer use kiya to remove karo ya fir eventlisteners add kiya to remove karo, ya fir conditional rerendering kari hai to use karo ye wala function taki unmount ho jae)
+  return ()=>{
+
+  }
+},[x,y,z,...])
+```javascript
+
+import React,{ useEffect, useState } from "react";
+
+function App() {
+  const [clicked,setClicked] = useState(false);
+  const [count,setCount]=useState(0);
+
+  useEffect(()=>{
+    console.log("Mounted",count);  
+    return ()=>{
+      console.log("Unmounted",count);
+    }
+  },[clicked])
+  return (
+    <div>
+      <button onClick={() => {
+        setClicked(!clicked)
+        setCount(count+1);
+        }}>Click Me {count}
+      </button>
+    </div>
+  );
+}
+
+export default App
+
+```
+
+- Is wale example pehel **mounted 0** likh ke aega okk
+- Fir agar click kiya tumne to state change hui , useEffect mein aega kyunki component re render hua hai
+- lekin pehele pichla cleanup chalega **unmounted 0** aega likh ke aega
+- fir naya wala useEffect function run hoga **mounted 1** likh ke aega
+ 
+
+### b. useRef
+
+- Dekh bhai agar variable change hota hai to re render hota hai component lekin agar tum aisa na chaho to 
+- then use useRef
+- **useRef ek React hook hai jo mutable values ko store karne ke liye use hota hai. Ye re-render trigger nahi karta aur directly DOM elements ko access karne ka tareeka deta hai.**
+
+- Lets take an exmaple jahan tumne count batana hai kitni baar component re render hua hai
+
+#### First case re render se bachana hai
+Ek code ye hai ( lekin error hai is code main)
+
+```jsx
+import React,{ useEffect, useState,useRef } from "react";
+
+function App() {
+  const [val,setVal] = useState(0);
+  const [count, setCount] = useState(0)
+
+  // dekh bhai ye run hua pehle render pe ( Fir count badh gaya (yani state change hui aur fir se run hoga ye aur fir state change hogi isliye infinity loop mein fas gaye))
+  useEffect(()=>{
+    setCount(count+1);
+  })
+  return <div>
+    <button onClick={()=> setVal(prevVal => prevVal+1)}>+1</button>
+    <h3>{val}</h3>
+    <button onClick={()=> setVal(prevVal => prevVal-1)}>-1</button>
+    <h3>Component Rerendered : {count}</h3>
+  </div>
+}
+
+export default App
+```
+- Ye code working hai (useRef rerender ni karwa rha faltu ka)
+
+```jsx
+import React,{ useEffect, useState,useRef } from "react";
+
+function App() {
+  const [val,setVal] = useState(0);
+  const count=useRef(0);
+
+  useEffect(()=>{
+    count.current+=1;
+  })
+  
+  return <div>
+    <button onClick={()=> setVal(prevVal => prevVal+1)}>+1</button>
+    <h3>{val}</h3>
+    <button onClick={()=> setVal(prevVal => prevVal-1)}>-1</button>
+    <h3>Component Rerendered : {count.current}</h3>
+  </div>
+}
+export default App
+```
+
+#### Second case DOM elements manipulate karna
+
+- tum reference bhi bana sakte ho dom element ka aur use use kar sakte ho 
+
+```jsx
+import React,{ useEffect, useState,useRef } from "react";
+import './App.css'
+function App() {
+  const inputRef=useRef(null);
+  const [val,setVal]=useState("");
+
+  const handleClick = () => {
+    setVal(inputRef.current.value)
+  }
+  return <div>
+    <input type='text' ref={inputRef}/>
+    <button onClick={handleClick}> Click Me</button>
+    <h3>Input value is : {val}</h3>
+  </div>
+}
+
+export default App
+```
+
+
+### c. useMemo
+
+- useMemo ek React hook hai jo expensive calculations ko cache karne ke liye use hota hai. Ye performance optimization ke liye use hota hai - calculation sirf tab dobara karega jab dependencies change hongi.
+- ye kahta hai ek baar calculation kar lo uske baad na karna re-render pe , Lekin han agar dependency array mein kuch hai to kar sakte ho fir se calculate
+- Syntax - **useMemo(cb,dependencyArray)** - jo is dependecyArray mein hoga agar wo change hota hai tabhi ye function run hoga
+
+- Example
+
+```jsx
+
+import React,{ useEffect, useState,useMemo} from "react";
+import './App.css'
+function App() {
+  const [click1,setClick1] =  useState(false);
+  const [click2,setClick2] = useState(false);
+
+  function expensiveCalculation(){
+    let sum=0;
+
+    console.log("Expensive Calculation Running");
+    for(let i=0;i<100000;i++){
+      sum+=i;
+    }
+    return sum;
+  }
+
+  console.log("Component Rendered");
+  const sum=expensiveCalculation()
+
+  return <div>
+    <button onClick={()=>setClick1(!click1)}>Click1?</button>
+    <button onClick={()=>setClick2(!click2)}>Click2?</button>
+    <h1>Expensive Calculation Value: {sum}</h1>
+  </div>
+}
+
+export default App
+
+```
+
+- ismein wo expensive calculation hamesha run ho rhi hai
+- mujhe to bas jab click1 pe click karun tab run ho
+- use useMemo hook
+
+just add this line
+```jsx
+const sum=useMemo(expensiveCalculation,[click1]); // ab tabhi run hoga jab click1 state mein changes aenge
+
+
+```
+### d. Memo ( Not a hook but a concept )
+
+- React.memo ek higher-order component (HOC) hai jo functional components ko memoize karne ke liye use hota hai. Ye component ko unnecessary re-renders se bachata hai by remembering the previous rendered result.
+- Basically ye check karta hai ki prop change hue ki ni agar hue to re-redner kardega warna ni karega
+
+- Example
+
+- **Without React.memo or memo**
+
+```jsx
+
+import React, { useEffect, useState, useCallback } from "react";
+import './App.css'
+import ChildComponent from "./components/ChildComponent";
+function App() {
+
+  const [parent,setParent] = useState(0);
+  const [child,setChild] = useState(0);
+
+  return <div>
+    <h1>Hi I am parent {parent}</h1>
+    <button onClick={()=>setParent(parent+1)}>Click Parent to increase parent</button>
+    <ChildComponent child={child}/>
+  </div>
+}
+
+export default App
+
+
+import React from 'react'
+
+const ChildComponent = ({child}) => {
+  console.log('ChildComponent rendered'); // Debug
+  return <h3>Hi I am child {child}</h3>
+}
+
+export default ChildComponent
+
+```
+
+- ismein agar parent wale component ke button ko click karte ho to parent ki state change hui lekin fir bhi child wala component re-render ho rha
+- how to fix this
+- use memo
+
+- export default React.memo(ChildComponent) - sirf ek ye line se re-render se bach gae ( Ab jab child prop change hoga tabhi ye child component re-render hoga warna ni hoga parent chahe re-render ho ya na ho)
+
+### e. useCallback
+
+- it lets you cache a function definition between re-renders
+- instead of creating a new function it provides the cached function between re renders
+- Syntax - useCallback(()=>{},[])
+
+```jsx
+import React, { useEffect, useState, useCallback } from "react";
+import './App.css'
+import ChildComponent from "./components/ChildComponent";
+function App() {
+
+  const [parent,setParent] = useState(0);
+  const [child,setChild] = useState(0);
+
+  const childFunc = () => {
+    console.log('Hey I am a child function');
+  }
+
+  return <div>
+    <h1>Hi I am parent {parent}</h1>
+    <button onClick={()=>setParent(parent+1)}>Click Parent to increase parent</button>
+    <ChildComponent child={child} childFunc={childFunc}/>
+  </div>
+}
+
+export default App
+
+
+
+ChildComponent
+
+import React from 'react'
+
+const ChildComponent = ({child,childFunc}) => {
+  console.log('ChildComponent rendered'); // Debug
+
+  childFunc();
+  return <h3>Hi I am child {child}</h3>
+}
+
+export default React.memo(ChildComponent)
+```
+
+- Yaar ismein bhi child compononent kyun render ho rha maine to memo use kiya hai props mein to koi change ni hai fir kyun???
+- Issue is functional equality ( jab bhi parent re-render ho rha to function ka reference change ho rha to fir child ko lag rha ki koi alag prop aya hai isliye re-render ho rha wo)
+
+- **To FIX use useCallback hook**
+**useCallback freezes a function**
+```jsx
+
+  const childFunc = useCallback(() => {
+    console.log('Hey I am a child function');
+  },[])
+
+```
+- isse ham baar baar re-render se bach gae ( Ek baar function create hua aur ab wahi rahega)
+- lekin man lo hamesha freeze to karna ni chahunga, to mujhe agar is function ko run karana ho to???
+- Simple dependency array mein dal do ki agar ye change hua to main function execute kardunga ( yani naya function ban jaega)
+
+```jsx
+
+  const childFunc = useCallback(() => {
+    console.log('Hey I am a child function');
+  },[parent])
+
+```
+- ab jab parent wala state change hogi tabhi ye function doobara run hoga ( abhi to hamare exmaple mein ek hi state hai manlo 10 hoti to?? maine sirf tabhi ye function dobara create karwaunga jab parent state change hogi)
