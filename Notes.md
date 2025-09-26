@@ -1397,3 +1397,122 @@ export default React.memo(ChildComponent)
 
 ```
 - ab jab parent wala state change hogi tabhi ye function doobara run hoga ( abhi to hamare exmaple mein ek hi state hai manlo 10 hoti to?? maine sirf tabhi ye function dobara create karwaunga jab parent state change hogi)
+
+# Lession 11 ( React Router DOM)
+
+- External library hai jisse multiple pages mein navigation ho sakta hai without reload
+
+**Interview Question**
+
+- a tag use kar sakte hai for routing?
+- Hn kar to sakte hai but poora page fir se reload hoga ( To react use karne ka kya matlab)
+- Use Link
+
+#### Link vs NavLink
+
+- Link simply navigate karne ke liye
+- NavLink hame isActive and isPending state bhi de deta hai to ham usse pata laga sakte ki ye route active hai ki ni ( AUr us basis pe color change ya koi bhi custom logic laga sakte hai for links) Example dekh lo
+
+
+```jsx
+
+Link vs NavLink dono navigation ke liye use hote hain, letein dono mein kuch important differences hain. Aasan Hinglish mein samjhta hoon:
+
+🔗 Link (Basic Version)
+Link sirf page change karne ke kaam aata hai.
+
+jsx
+import { Link } from 'react-router-dom';
+
+// Simple usage
+<Link to="/about">About Page</Link>
+
+// Props ke saath
+<Link to="/contact" className="nav-link" style={{color: 'blue'}}>
+    Contact
+</Link>
+Link ke Features:
+Simple navigation ke liye
+
+Koi special active class nahi deta
+
+Anchor tag (<a>) ki tarah kaam karta hai
+
+🎯 NavLink (Smart Version)
+NavLink extra features ke saath aata hai, especially active link track karne ke liye.
+
+jsx
+import { NavLink } from 'react-router-dom';
+
+// Basic NavLink
+<NavLink to="/about">About</NavLink>
+
+// Active state handle karne ke liye
+<NavLink 
+    to="/about"
+    style={({ isActive }) => ({
+        color: isActive ? 'red' : 'blue'
+    })}
+>
+    About
+</NavLink>
+
+// CSS classes ke saath
+<NavLink 
+    to="/about"
+    className={({ isActive }) => 
+        isActive ? 'active-link' : 'normal-link'
+    }
+>
+    About
+</NavLink>
+
+```
+
+- Tum BrowserRouter bhi use kar sakte ho lekin wo puran method ho gaya hai
+- Use <RouterProvider router={router}/>
+- Ab ismein router banana padta hai
+- App mein jo cheezein fix hai unko as it is likh do aur ek Outlet karke component ata hai from react-router dom wo ye batata hai ki outlet ki jagah naye components a jaenge lekin uske alawa sab fix rahega hamesha aega har page pe ( Example navbar aur footer)
+- Router create karne ke do tareeqe
+
+```jsx
+// const router=createBrowserRouter([
+//   {
+//     path:"/",
+//     element: <App/>,
+//     children:[
+//       {
+//         path:"",
+//         element:<Home/>
+//       },
+//       {
+//         path:"about",
+//         element:<About/>
+//       },
+//       {
+//         path:"contact",
+//         element:<Contact/>
+//       }
+//     ]
+//   }
+// ])
+
+const router=createBrowserRouter(
+  createRoutesFromChildren(
+    <Route path='/' element={<App/>}>
+      <Route path='' element={<Home/>}></Route>
+      <Route path='about' element={<About/>}></Route>
+      <Route path='contact' element={<Contact/>}></Route>
+    </Route>
+  )
+)
+```
+
+- **Concept of Loader**
+
+- React Router DOM `useLoaderData` hook provide karta hai
+- Jab user kisi route pe click karta hai, usi waqt data fetching start ho jati hai
+- Traditional approach mein page load hone ke baad useEffect chalta tha
+- Isse user experience improve hota hai - loading states better manage hote hain
+- Router automatic caching karta hai same routes ke liye
+- Performance same hai par UX better hai
