@@ -1516,3 +1516,50 @@ const router=createBrowserRouter(
 - Isse user experience improve hota hai - loading states better manage hote hain
 - Router automatic caching karta hai same routes ke liye
 - Performance same hai par UX better hai
+
+
+# Lession 12 ( Context API )
+
+#### Context API Kya Hai? (What is Context API?)
+
+- Context API ek React feature hai jo "prop drilling" problem solve karta hai.
+- **Prop Drilling:** Jab aapko parent component se child component mein data pass karna hota hai, aur woh child ke bhi child ko data chahiye hota hai, toh aap har level pe manually props pass karte ho
+- **Context API:** Yeh ek central store banata hai jahan aap data rakhte ho, aur koi bhi component directly us data ko access kar sakta hai
+
+![Prop-Drillin-Example](images/image-1.png)
+
+#### Note
+
+- Jab ham prop drilling karte hai to, kai components ko data milta hai jinko us data ki need bhi ni hoti hai
+- Issue security ho sakta hai, data leakage bhi ho sakta
+
+#### Context API Kyu Use Karein? (Why Use Context API?)
+
+**Fayde (Advantages):**
+- Prop drilling se bachao - Har level pe props pass karne ki zaroorat nahi
+- Global state management - Pure app mein kahi bhi data access kar sakte ho
+- Code clean rehta hai - Complex component trees mein easy data sharing
+- Built-in React mein hai - Extra library install karne ki zaroorat nahi
+
+**Nuksan (Disadvantages):**
+- Overuse na karein - Har choti state ke liye context na banayein
+- Performance issues - Frequent updates mein thoda slow ho sakta hai
+- Complex testing - Context-dependent components test karna thoda tricky ho sakta hai
+
+
+#### Kya sirf contextAPI hi use hota hai state management ke liye??
+
+- Ni bhai contextAPI to sirf react deta lekin
+- Redux hai , easier version redux-toolkit ( RTK) , zustand etc
+
+
+### Steps for Context
+
+- Sabse pehle Jiska context bana rhe ho uska js file banao
+- Fir Context Provider banao jisko andar jo bhi component aega wo tum as it is render kar doge
+- Aur han yahi par jis data , fn etc, jis cheez ka access dena hai within context wo create kar lo yahan
+
+### Doosra Method hai
+
+- Ek hi file mein context aur provider bana do
+- Aur custom Hook return kardo
