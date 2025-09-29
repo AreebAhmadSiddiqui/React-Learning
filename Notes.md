@@ -1563,3 +1563,75 @@ const router=createBrowserRouter(
 
 - Ek hi file mein context aur provider bana do
 - Aur custom Hook return kardo
+
+
+# Lession 13 ( Redux )
+
+- Redux hai lekin uska abstracted version is Redux-ToolKit
+- Redux ek predictable state container hai JavaScript apps ke liye. Simple bhasha mein: **"Redux ek aisa dabba hai jisme aapki poori app ki state safely store rehti hai"**
+
+#### Components of Redux
+
+- Ek store hoga jismein ( mini stores ho sakte hai)
+- Reducers honge jo ki functionality wala part handle karenge ( kya change karna hai, kaise karna hai wagerah wagerah)
+- useSelector jab value lena ho useDispatcher jab value bhejna ho
+
+#### Steps
+
+- Create a store
+- Create reducers ( we call them slices in rtk)
+  - Ismein context api jaisa hi hai initial state wagerah banao uske baad functions likho jinhe ham reducers kahte hai
+  - Lekin RTK mein hame function ki definition bhi likhne padegi hamesha
+  - Also hame functions mein (state,action) variables milte hai
+  - state - current state ki values
+  - action - jab bhi data pass ho rha
+
+- Dispatch reducer ka use karte hue store mein value change karta hai
+- Isi mein ham jo values dalte hai wo action.payload le pata hai
+
+**Poora Steps in detail**
+
+Redux Toolkit Step-by-Step Process Recap
+The final segment of the video summarizes the core steps for implementing state management using Redux Toolkit (RTK).
+1. Core Concepts Review
+• Redux vs. React Redux: Redux is a core independent library, while React Redux provides the necessary wiring for React applications to communicate with Redux.
+• Redux Toolkit (RTK): RTK handles much of the complexity automatically, such as ensuring state is never mutated (improperly changed). Unlike classic Redux or Context API, which required manual state preservation (e.g., spreading arrays with ...), RTK abstracts this process.
+• Single Source of Truth: Every application typically has one Store.
+2. Store Creation
+• The implementation always begins by creating the Store.
+• The store is configured using the configureStore method, which is imported from the Redux Toolkit.
+• The store is restrictive; it will only update values based on the Reducers that are explicitly registered within it.
+3. Creating Slices (Reducers)
+• The next step is to create a Slice using the createSlice method.
+    ◦ In documentation, these are sometimes referred to as 'features'.
+• Each slice requires three major components:
+    1. Name: This is the name given to the slice (e.g., "todo") and is visible in the Redux browser extension DevTools.
+    2. Initial State: This defines the default structure and values of the data (e.g., an empty array or an object).
+    3. Reducers: This is an object containing functions (key-function pairs) that define how the state can be updated (e.g., addTodo, removeTodo).
+4. Defining Reducer Logic
+• When writing a reducer function within a slice, you are automatically given access to two parameters:
+    1. State: Provides access to the currently updated state value within the store.
+    2. Action: Provides access to the data being passed in, often retrieved using action.payload.
+• State Updates in RTK: Because RTK manages immutability internally, you can directly push values to the state (e.g., state.todos.push(newTodo)), which simplifies the logic significantly compared to previous methods.
+• The logic for complex operations (like update or delete) is handled by finding the item by ID and either changing its value or using the JavaScript filter method to exclude it, respectively.
+5. Exporting the Slice Components
+A slice needs to export two distinct pieces of information:
+1. Individual Functionalities (Actions): These are exported using todoSlice.actions (or whatever the slice name is). These individual functions (e.g., addTodo, removeTodo) are needed by components to dispatch actions.
+2. The Main Reducer Source: This is exported using todoSlice.reducer. This main source containing all the logic is required by the global Store.
+6. Wiring the Reducers to the Store
+• The exported main reducer source (e.g., todoReducer from todoSlice.reducer) must be imported into the store configuration file.
+• It is registered inside the object passed to configureStore.
+7. Using Redux in Components (Sending Data)
+• To send data or execute a function that updates the state (an action), you must use the useDispatch hook.
+• useDispatch returns the dispatch method.
+• You call dispatch and pass the imported reducer function (e.g., addTodo) along with any necessary data as an argument. This data becomes the action.payload accessible in the reducer function.
+8. Using Redux in Components (Receiving Data)
+• To retrieve values from the store, you must use the useSelector hook.
+• useSelector takes a callback function, which is given access to the current State object (the entire store).
+• From this State, you select the specific portion you need (e.g., state.todos, state.auth, state.products). This selected data is then held in a variable.
+• Once the data is in the variable, pure JavaScript is used (e.g., map or loops) to display the values.
+9. DevTools Functionality
+The use of the Redux DevTools (a Chrome extension) provides powerful debugging and visualization capabilities:
+• State Inspection: You can view the entire application State.
+• Action Tracking: You can see what actions were called, their types (e.g., todo/addTodo), and the Payload that was sent with the action (e.g., the text value).
+• Time Travel: The tool provides a bar that allows you to trace changes over time, jumping back to previous states following a specific action (e.g., jumping back to the state after the first addTodo call). This helps monitor the entire application timeline and state history.
