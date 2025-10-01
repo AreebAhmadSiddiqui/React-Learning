@@ -1635,3 +1635,25 @@ The use of the Redux DevTools (a Chrome extension) provides powerful debugging a
 • State Inspection: You can view the entire application State.
 • Action Tracking: You can see what actions were called, their types (e.g., todo/addTodo), and the Payload that was sent with the action (e.g., the text value).
 • Time Travel: The tool provides a bar that allows you to trace changes over time, jumping back to previous states following a specific action (e.g., jumping back to the state after the first addTodo call). This helps monitor the entire application timeline and state history.
+
+# Lession 14 ( Mega Project Learning)
+
+- Appwrite provides backend as a service
+
+### Notes
+
+- ENV variables hamesha root mein banae aur .env mein daliye
+- lekin ham ek .env.sample file bhi banate hai jismein ham sirf keys rakhte hai aur ise push bhi karte hai on github taki logon ko samjh ae ki kin kin env ki zarurat hai unhe
+- agar cra se react app banaya hai to **REACT_APP_** se hi shuru hogi tumhari keys in .env file and to access **process.env.var_name**
+- agar vite se bana hai to **VITE_** and **import.meta.env.var_name**
+- Lekin production mein ek config file banao jisko export karo for getting the env variables
+- Kyun karte hai aisa, isse guarantee rahti hai ki jo bhi chahiye wo string mein hoga bhale hi empty ho ( seedha access karenge to kuch issue bhi a sakta)
+
+- **Important concept** 
+
+### Vendor Locking
+
+- ismein ham apne app ko kisi bhi ek vendor se locked ni karte
+- matlab ki ye wala app appwrite se bana hai ahar appwrite band ho gya to?? agar koi ni baas pe jana ho to ?? ya custom server ho apna to?? Ye dependency dikkat karegi
+- to ham kya karte hai services banata hai
+- Jiske andar functions wagerah hote hai ab wo function appwrite ko call karein appwrong ko kare wo depend ham pe karega
