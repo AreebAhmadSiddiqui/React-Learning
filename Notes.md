@@ -1612,6 +1612,8 @@ The final segment of the video summarizes the core steps for implementing state 
 • When writing a reducer function within a slice, you are automatically given access to two parameters:
     1. State: Provides access to the currently updated state value within the store.
     2. Action: Provides access to the data being passed in, often retrieved using action.payload.
+
+
 • State Updates in RTK: Because RTK manages immutability internally, you can directly push values to the state (e.g., state.todos.push(newTodo)), which simplifies the logic significantly compared to previous methods.
 • The logic for complex operations (like update or delete) is handled by finding the item by ID and either changing its value or using the JavaScript filter method to exclude it, respectively.
 5. Exporting the Slice Components
@@ -1657,3 +1659,21 @@ The use of the Redux DevTools (a Chrome extension) provides powerful debugging a
 - matlab ki ye wala app appwrite se bana hai ahar appwrite band ho gya to?? agar koi ni baas pe jana ho to ?? ya custom server ho apna to?? Ye dependency dikkat karegi
 - to ham kya karte hai services banata hai
 - Jiske andar functions wagerah hote hai ab wo function appwrite ko call karein appwrong ko kare wo depend ham pe karega
+
+### Components Based Design ( Production )
+
+- Components ko jitna reuse kar sakte ho karo
+
+### Example of forward ref ( a hook in react rarely used)
+
+- Dekho tumahre pass 2 input field hai ( email, pass)
+- Lekin wo dono ek component hai to kya hoga unka state alag hoga
+- Aur jahan tum unko render karwa rhe ho uska state alag hoga 
+- To indono ko combine kaise karoge??? forwardRef hook se ( reference to chahiye na )
+
+
+### React Form Mein
+
+- handleSubmit jo react-hook-form deta hai wo ek event hi hai
+- isliye handleSubmit naam ka function na rakhna ,kuch aur rakh dena ( in this case hamne input function call kiya hai)
+- ...register karna hi hai ( ex - ...register('unique-key'))
