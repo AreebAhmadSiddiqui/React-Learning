@@ -19,7 +19,7 @@
 - State Management ( By default ni tha) ( Redux,Context API)
 - Routing ( By default ni hai)
 
-# Lession 2 ( Create React App)
+# Lession 2 ( Create React App )
 
 - npx creat-react-app project_name ( bahut zyada cheezein install kardeta hai jo need bhi ni hai) ( Npx - node package executer)
 - npm run start se code start
