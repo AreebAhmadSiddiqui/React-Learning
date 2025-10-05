@@ -14,7 +14,7 @@ function App() {
   const dispatch=useDispatch();
 
   useEffect(()=>{
-    authService.getCurrUser()
+    authService.getCurrentUser()
     .then((userData)=>{
       if(userData){
         dispatch(login({userData}))

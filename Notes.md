@@ -1677,3 +1677,10 @@ The use of the Redux DevTools (a Chrome extension) provides powerful debugging a
 - handleSubmit jo react-hook-form deta hai wo ek event hi hai
 - isliye handleSubmit naam ka function na rakhna ,kuch aur rakh dena ( in this case hamne input function call kiya hai)
 - ...register karna hi hai ( ex - ...register('unique-key'))
+
+
+### AuthLayout Component
+
+- For protection banate hai
+- Ismein ham authentication user se bhijwa rhe hai, lekin ham chahe to store se hi directly check kar sakte jaisa check kar rhe is code mein
+- to authentication wala prop tum na bhi bhejo to chalega balki better hoga
