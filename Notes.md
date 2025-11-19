@@ -1283,6 +1283,12 @@ const sum=useMemo(expensiveCalculation,[click1]); // ab tabhi run hoga jab click
 
 
 ```
+- Flow
+  - Runs during render.
+  - Returns the computed value immediately.
+  - React uses that value in the same render cycle → no state update needed → no second render.
+
+
 ### d. Memo ( Not a hook but a concept )
 
 - React.memo ek higher-order component (HOC) hai jo functional components ko memoize karne ke liye use hota hai. Ye component ko unnecessary re-renders se bachata hai by remembering the previous rendered result.
